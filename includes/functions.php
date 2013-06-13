@@ -53,7 +53,7 @@ function debug($message) {
 }
 
 function getRootURL() {
-   return "http://bms-dev.no-ip.org/bms";
+   return "http://bms-dev.no-ip.org/bms-dev";
 }
 
 function system_error($error) {
