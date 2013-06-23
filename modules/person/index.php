@@ -14,6 +14,81 @@ switch ($action) {
    
    //Create/view a user
    case "create":
+
+      //Test read permissions
+      if ($bms->me->can("System_hasAdmin")
+         || $bms->me->can("System_UsersAdmin") ) {
+
+      $values = array(
+                  "person_id"                   =>    "",
+                  "person_username"             =>    "",
+                  "person_password_attempts"    =>    "&nbsp;",
+                  "person_last_attempt"         =>    "&nbsp;",
+                  "person_created"              =>    "&nbsp;",
+                  "person_enabled"              =>    "&nbsp;",
+                  "person_firstname"            =>    "",
+                  "person_lastname"             =>    "",
+                  "person_mobile"               =>    "",
+                  "person_home"                 =>    "",
+                  "person_email"                =>    "",
+                  "person_address"              =>    "",
+                  "person_city"                 =>    "",
+                  "person_state"                =>    "",
+                  "person_zip"                  =>    "",
+                  "person_recommended"          =>    "",
+                  "person_adverttype"           =>    "",
+                  "submit_type"                 =>    "Create");
+
+      } else {
+         system_error("You are not authorized to create a new user");
+      }
+   case "modify":
+
+      //Create body template
+      $bms->template->body = new Template("modules/person/adduser.tpl");
+
+
+      //Test write permissions
+      if ($bms->me->can("System_hasAdmin")
+         || $bms->me->can("System_UsersAdmin")
+         || $bms->me->can("Person_" . $person_id . "_Write")) {
+
+
+      if ($action == "modify") {
+      //Get id
+      $person_id = (isset($_GET['id'])) ? $_GET['id'] : $_SESSION['person_id'];
+
+      //Create person object
+      $person = new Person($person_id);
+
+      $values = array(
+               "person_id"                   =>    $person_id,
+               "person_username"             =>    $person->get_Username(),
+               "person_password_attempts"    =>    $person->get_Password_Details()->attempts,
+               "person_last_attempt"         =>    $person->get_Password_Details()->last_attempt,
+               "person_created"              =>    $person->get_Created(),
+               "person_enabled"              =>    $person->get_Enabled(),
+               "person_firstname"            =>    $person->get_Name()->firstname,
+               "person_lastname"             =>    $person->get_Name()->lastname,
+               "person_mobile"               =>    $person->get_Contact_Details()->mobile,
+               "person_home"                 =>    $person->get_Contact_Details()->home,
+               "person_email"                =>    $person->get_Contact_Details()->email,
+               "person_address"              =>    $person->get_Address_Details()->street,
+               "person_city"                 =>    $person->get_Address_Details()->city,
+               "person_state"                =>    $person->get_Address_Details()->state,
+               "person_zip"                  =>    $person->get_Address_Details()->zip,
+               "person_recommended"          =>    $person->get_Recommended(),
+               "person_adverttype"           =>    $person->get_AdvertType(),
+               "submit_type"                 =>    "Update");
+      }
+
+      $bms->template->body->setValues($values);
+
+      } else {
+         system_error("You are not authorized to edit a new user");
+      }
+
+   break;
    case "view":
 
       //Get id

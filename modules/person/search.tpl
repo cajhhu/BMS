@@ -22,7 +22,7 @@
       <hr>
       <center><font size="+1"><b>Actions</b></font></center>
       <center>
-      <a href="index.php?page=Person&action=add">Add User</a><br>
+      <a href="index.php?page=Person&action=create">Add User</a><br>
       <a href="index.php?page=Email">Email User(s)</a>
       </center>
       <br>

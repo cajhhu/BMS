@@ -46,13 +46,18 @@ if (!isset($_POST['resp']) || $_POST['resp'] != 'ajax') {
    }
    if (isset($bms->me) && ($bms->me->has_any('task'))) {
       array_push($navigation["loop:navigation"], array("module" => "Task",      "title" => "Tasks"));
-
+   }
+   if (isset($bms->me) && ($bms->me->has_any('timesheet'))) {
+      array_push($navigation["loop:navigation"], array("module" => "Timesheet",      "title" => "Timesheets"));
    }
    if (isset($bms->me) && ($bms->me->has_any('gallery'))) {
       array_push($navigation["loop:navigation"], array("module" => "Gallery",   "title" => "Gallery"));
    }
    if (isset($bms->me) && ($bms->me->can('System_hasAdmin'))) {
       array_push($navigation["loop:navigation"], array("module" => "Email",     "title" => "Mass Email"));
+   }
+   if (isset($bms->me) && ($bms->me->can('System_hasAdmin'))) {
+      array_push($navigation["loop:navigation"], array("module" => "Admin",     "title" => "Admin CP"));
    }
    if (isset($bms->me)) {
       array_push($navigation["loop:navigation"], array("module" => "Logout",    "title" => "Logout"));

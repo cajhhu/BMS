@@ -1,12 +1,16 @@
 <?
 
+$jobs = get_Sub_Relations("Person", $person_id, "Job");
+
+$jobids = "";
+
+foreach ($jobs as $job) {
+   $jobids .= $job['parent_module_id'] . ",";
+}
 
 //Get jobs that the viewing user has permission to see
-$sql = "SELECT job_id, job_title, job_type, job_date, job_time, job_city, job_state FROM Job j, Relations r
-   WHERE r.parent_module_name =  'Person'
-   AND r.child_module_name    =  'Job'
-   AND r.parent_module_id     =  :person_id
-   AND r.child_module_id      =  j.job_id";
+$sql = "SELECT job_id, job_title, job_type, job_date, job_time, job_city, job_state FROM Job
+   WHERE job_id IN (" . rtrim($jobids, ',') . ")";
    if (!$bms->me->can("System_hasAdmin")) {
       $items = $bms->me->can_search("Job");
       $sql .= " AND job_id IN (" . implode(",", $items["Job"]) . ")";
@@ -15,8 +19,7 @@ $sql = "SELECT job_id, job_title, job_type, job_date, job_time, job_city, job_st
 
 $query = $db->prepare($sql);
 
-$query->execute(array(
-   ":person_id"   => $person_id));
+$query->execute();
 
 //Build column array
 $i = 0;

@@ -17,6 +17,7 @@ class Person {
    //Information
    protected   $person_firstname;
    protected   $person_lastname;
+   protected   $person_company;
 
    //Contacts  
    protected   $person_mobile;         //Mobile phone
@@ -64,6 +65,7 @@ class Person {
          $this->person_enabled            =     (bool)$data['person_enabled'];
          $this->person_firstname          =     $data['person_firstname'];
          $this->person_lastname           =     $data['person_lastname'];
+         $this->person_company            =     $data['person_company'];
          $this->person_mobile             =     $data['person_mobile'];
          $this->person_home               =     $data['person_home'];
          $this->person_email              =     $data['person_email'];
@@ -76,7 +78,7 @@ class Person {
 
          return $this;
       }
-      
+
       return null;
       
    }
@@ -95,6 +97,7 @@ class Person {
          $this->person_enabled            =     (bool)$data['person_enabled'];
          $this->person_firstname          =     $data['person_firstname'];
          $this->person_lastname           =     $data['person_lastname'];
+         $this->person_company            =     $data['person_company'];
          $this->person_mobile             =     $data['person_mobile'];
          $this->person_home               =     $data['person_home'];
          $this->person_email              =     $data['person_email'];
@@ -110,7 +113,7 @@ class Person {
    }
    
    public function get_ID() {
-   	return $this->person_id;
+      return $this->person_id;
    }
    
    public function get_Username() {
@@ -143,6 +146,10 @@ class Person {
          'firstname'       =>    $this->person_firstname,
          'lastname'        =>    $this->person_lastname,
          'name'            =>    $this->person_firstname . " " . $this->person_lastname);
+   }
+
+   public function get_Company() {
+      return $this->person_company;
    }
    
    public function get_Created() {

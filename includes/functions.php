@@ -63,4 +63,51 @@ function system_error($error) {
    $bms->template->body = new Template("includes/error.tpl");
    $bms->template->body->setValues(array(
       "error"     =>    $error));
+
+}
+
+function get_Sub_Relations($module = "Person", $id = 0, $target = NULL) {
+
+   global $bms;
+
+   $id = ($id) ? $id : $bms->me->get_ID();
+
+   $db = ConnectToDB();
+
+   $sql =   "     SELECT * FROM Relations
+                  WHERE `left` > (SELECT `left` FROM Relations
+                     WHERE `parent_module_name` = :module
+                     AND `parent_module_id` = :id)
+                  AND `right` < (SELECT `right` FROM Relations
+                     WHERE `parent_module_name` = :module
+                     AND `parent_module_id` = :id)
+            ";
+
+   if ($target != NULL) {
+
+      $sql  .= "  AND `parent_module_name` = :target";
+   }
+
+
+   $sql  .=    "  ORDER BY `left` ASC";
+
+   $query = $db->prepare($sql);
+
+   $query->bindValue(":module", $module);
+   $query->bindValue(":id", $id);
+
+   if ($target != NULL) {
+      $query->bindValue(":target", $target, PDO::PARAM_STR);
+   }
+
+   $query->execute();
+
+   $array = Array();
+
+   while ($row = $query->fetch()) {
+      array_push($array, Array("parent_module_name" => $row['parent_module_name'], "parent_module_id" => $row['parent_module_id']));
+   }
+
+
+   return $array;
 }
